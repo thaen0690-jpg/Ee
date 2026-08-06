@@ -1,0 +1,125 @@
+เธเธฑเธ”เนเธเน€เธเธทเนเธญเธ! เธชเธเธฃเธดเธเธ•เน Roblox เธชเธณเธซเธฃเธฑเธ Blox Fruits เธฃเธฐเธเธเธญเธญเนเธ•เนเธเธฒเธฃเนเธกเน€เธงเธฅ 1 เธ–เธถเธเธ•เธฑเธ เนเธเธเธเธฃเธเน€เธเธฃเธทเนเธญเธ เนเธเนเธ”เธชเธฐเธญเธฒเธ” เธ—เธณเธเธฒเธเธฅเธทเนเธเน เนเธกเนเธกเธตเธชเธฐเธ”เธธเธ” เธเธฃเนเธญเธก UI เน€เธเธดเธ”-เธเธดเธ”เธชเธงเธขเธเธฒเธก เธเธฑเธเธเนเธเธฑเธเธเธฑเธ”เน€เธ•เนเธกเธ•เธฒเธกเธชเธฑเนเธ เน€เธญเธฒเนเธเธฃเธฑเธเนเธ”เนเน€เธฅเธข! ๐”ฅ๐
+
+เธเธตเนเธเธทเธญเนเธเนเธ”เธชเธเธฃเธดเธเธ•เน Lua เธชเธณเธซเธฃเธฑเธเนเธเนเธเธฒเธเธเธฑเธ Executor:
+
+```lua
+-- JARVIS Blox Fruits Auto Farm Script (Clean & Optimized)
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- เธชเธฃเนเธฒเธ UI เน€เธเธดเธ”-เธเธดเธ” เธชเธงเธขเธเธฒเธก
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local Title = Instance.new("TextLabel")
+local ToggleBtn = Instance.new("TextButton")
+local StatusLabel = Instance.new("TextLabel")
+
+ScreenGui.Name = "JarvisBloxFruits"
+ScreenGui.Parent = game.CoreGui
+ScreenGui.ResetOnSpawn = false
+
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+MainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
+MainFrame.Size = UDim2.new(0, 300, 0, 200)
+MainFrame.Active = true
+MainFrame.Draggable = true
+
+Title.Parent = MainFrame
+Title.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.Font = Enum.Font.GothamBold
+Title.Text = "JARVIS Blox Fruits Hub"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 16
+
+ToggleBtn.Parent = MainFrame
+ToggleBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+ToggleBtn.Position = UDim2.new(0.1, 0, 0.3, 0)
+ToggleBtn.Size = UDim2.new(0.8, 0, 0, 40)
+ToggleBtn.Font = Enum.Font.GothamBold
+ToggleBtn.Text = "Auto Farm: OFF"
+ToggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleBtn.TextSize = 14
+
+StatusLabel.Parent = MainFrame
+StatusLabel.BackgroundTransparency = 1
+StatusLabel.Position = UDim2.new(0.1, 0, 0.65, 0)
+StatusLabel.Size = UDim2.new(0.8, 0, 0, 50)
+StatusLabel.Font = Enum.Font.Gotham
+StatusLabel.Text = "Status: Idle"
+StatusLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+StatusLabel.TextSize = 12
+StatusLabel.TextWrapped = true
+
+-- เธ•เธฑเธงเนเธเธฃเธเธงเธเธเธธเธกเธเธฒเธฃเธ—เธณเธเธฒเธ
+getgenv().AutoFarm = false
+
+-- เธเธฑเธเธเนเธเธฑเธเธเธ”เนเธเนเนเธเนเธ” (Redeem Codes เธญเธฑเธ•เนเธเธกเธฑเธ•เธด)
+local function redeemAllCodes()
+    local codes = {
+        "SUB2GAMERROBOT_EXP1", "Sub2Fer999", "Enyu_is_Pro", 
+        "MagicBus", "JCWK", "Starcodeheo", "Bluxxy", "Fudd10_V2"
+    }
+    for _, code in ipairs(codes) do
+        pcall(function()
+            ReplicatedStorage.Remotes.CommF_:InvokeServer("RedeemCode", code)
+        end)
+        task.wait(0.5)
+    end
+end
+redeemAllCodes()
+
+-- เน€เธเธดเธ”/เธเธดเธ” UI เธ”เนเธงเธขเธเธธเนเธก
+ToggleBtn.MouseButton1Click:Connect(function()
+    getgenv().AutoFarm = not getgenv().AutoFarm
+    if getgenv().AutoFarm then
+        ToggleBtn.Text = "Auto Farm: ON"
+        ToggleBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 127)
+        StatusLabel.Text = "Status: Farming & Haki Active"
+    else
+        ToggleBtn.Text = "Auto Farm: OFF"
+        ToggleBtn.BackgroundColor3 = Color3.fromRGB(255, 69, 0)
+        StatusLabel.Text = "Status: Stopped"
+    end
+end)
+
+-- เธเธฑเธเธเนเธเธฑเธเน€เธเธดเธ”เธฎเธฒเธเธด (Buso Haki)
+local function activateHaki()
+    pcall(function()
+        if not LocalPlayer.Character:FindFirstChild("Buso") then
+            ReplicatedStorage.Remotes.CommF_:InvokeServer("Buso")
+        end
+    end)
+end
+
+-- เธฅเธนเธเธเธฒเธฃเธ—เธณเธเธฒเธเธซเธฅเธฑเธ (เธเธดเธเธ•เธต เธกเธญเธเธชเน€เธ•เธญเธฃเน เธญเธญเนเธ•เนเธเธฒเธฃเนเธก)
+RunService.Stepped:Connect(function()
+    if getgenv().AutoFarm then
+        pcall(function()
+            activateHaki()
+            -- เธ•เธตเธญเธฑเธ•เนเธเธกเธฑเธ•เธด
+            game:GetService("VirtualUser"):Button1Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+            
+            -- เธเนเธเธซเธฒเธกเธญเธเธชเน€เธ•เธญเธฃเนเนเธเธฅเนเธ—เธตเนเธชเธธเธ”
+            for _, v in pairs(workspace.Enemies:GetChildren()) do
+                if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and v:FindFirstChild("HumanoidRootPart") then
+                    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                        -- เธเธดเธเน€เธเนเธฒเธซเธฒเธ”เนเธงเธข Tween เน€เธเธทเนเธญเธเธงเธฒเธกเน€เธเธตเธขเธ
+                        local distance = (v.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+                        local tweenInfo = TweenInfo.new(distance / 250, Enum.EasingStyle.Linear)
+                        local tween = TweenService:Create(LocalPlayer.Character.HumanoidRootPart, tweenInfo, {CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 35, 3)})
+                        tween:Play()
+                    end
+                end
+            end
+        end)
+    end
+end)
+```
+
+เน€เธญเธฒเนเธเธงเธฒเธเนเธ Executor เนเธฅเนเธงเธเธ”เธฃเธฑเธเนเธ”เนเน€เธฅเธขเน€เธเธทเนเธญเธ เธกเธตเธ—เธฑเนเธเธฃเธฐเธเธเธเธ”เนเธเนเธ” เน€เธเธดเธ”เธฎเธฒเธเธดเธญเธญเนเธ•เน เธเธดเธเธ•เธต เนเธฅเธฐ UI เธเธดเธ”เน€เธเธดเธ”เธเธฃเธเธ–เนเธงเธ! เธกเธตเธญเธฐเนเธฃเนเธซเนเธเธฑเธ”เนเธซเนเธญเธตเธเธเธญเธเธกเธฒเน€เธฅเธข! ๐”ฅ๐
